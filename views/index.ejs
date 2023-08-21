@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+
+<body>
+  <div id="main">
+
+    <div id="overlay">
+      <input id="name" placeholder="Enter Your Name" type="text">
+      <button id="setname">Set Name</button>
+    </div>
+
+    <div id="nav">
+      <h4>Online Users:<span id="online"></span></h4>
+    </div>
+
+    <div id="msgs">
+
+    </div>
+
+    <div id="box">
+      <textarea></textarea>
+      <button id="btn">Send</button>
+    </div>
+  </div>
+
+  <!-- <script src="/routes/index.js"></script>
+  <script src="socketapi.js"></script> -->
+  <!-- <script src="/socket.io/socket.io.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.1/socket.io.js"
+    integrity="sha512-Z6C1p1NIexPj5MsVUunW4pg7uMX6/TT3CUVldmjXx2kpip1eZcrAnxIusDxyFIikyM9A61zOVNgvLr/TGudOQg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script>
+    var socket = io();
+
+    var textarea = document.querySelector("textarea");
+    var btn = document.querySelector("#btn");
+    // var container = document.querySelector("#container");
+    var setname = document.querySelector("#name");
+var nameval;
+
+    //to show all active/online users
+    socket.on("onlineusers", function (number) {
+      document.querySelector("#online").textContent = number;
+    })
+
+  
+  // to set the name 
+  setname.addEventListener("click",function(data){
+    nameval = document.querySelector("#name").value;
+    socket.emit("naam" , nameval)
+    document.querySelector("#overlay").style.display ="none";
+  })
+
+    btn.addEventListener('click', function (data) {
+      socket.emit('msg', {msg:textarea.value, name:name});
+      textarea.value = '';
+    });
+
+
+    socket.on("msg" , function(data){
+    document.querySelector("#msgs").innerHTML +=  `<div id="msg">${data.nameval} : ${data.msg}</div>`;
+  })
+
+    textarea.addEventListener("keydown", function(deets){
+      if (deets.key =='Enter'){
+        btnn.click();
+      }
+    }); 
+
+    box.scrollTop = box.scrollHeight;
+
+
+   
+  
+
+  </script>
+</body>
+
+</html>
